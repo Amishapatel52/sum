@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Sum Calculator</title>
+</head>
+<style>
+
+.inpt {
+    margin-bottom: 10px;
+}
+
+.container{
+    width: 450px;
+    height: 200px;
+    text-align: center;
+    margin: 200px;
+    background: whitesmoke;
+}
+h2 {
+    padding: 10px;
+}
+</style>
+<body>
+    <div class="container">
+  <h2>Number Sum Calculator</h2>
+  <input type="number" class="inpt" id="numberInput" placeholder="Enter a number">
+  <button onclick="addNumber()">Add Number</button>
+  <br>
+  <input type="text" class="inpt" id="numbersArrayInput" placeholder="Enter numbers separated by commas">
+  <button onclick="addNumbers()">Add Numbers</button>
+  <br>
+  <button class="inpt" onclick="calculateSum('reduce')">Calculate Sum (Reduce)</button>
+  <button class="inpt" onclick="calculateSum('loop')">Calculate Sum (Loop)</button>
+  <button class="inpt" onclick="calculateSum('recursion')">Calculate Sum (Recursion)</button>
+  <br><br>
+  <p id="result"></p>
+</div>
+  <script>
+    class NumberSum {
+      constructor() {
+        this.numbers = [];
+      }
+
+      addNumber(number) {
+        if (typeof number === 'number') {
+          this.numbers.push(number);
+          console.log(`${number} added to the list.`);
+        } else {
+          console.error('Please provide a valid number.');
+        }
+      }
+
+      addNumbers(numbersArray) {
+        if (Array.isArray(numbersArray)) {
+          this.numbers = this.numbers.concat(numbersArray.filter(num => typeof num === 'number'));
+          console.log('Numbers added to the list.');
+        } else {
+          console.error('Please provide a valid array of numbers.');
+        }
+      }
+
+      sumWithReduce() {
+        return this.numbers.reduce((acc, curr) => acc + curr, 0);
+      }
+
+      sumWithLoop() {
+        let sum = 0;
+        for (let num of this.numbers) {
+          sum += num;
+        }
+        return sum;
+      }
+
+      sumWithRecursion(index = 0) {
+        if (index >= this.numbers.length) {
+          return 0;
+        }
+        return this.numbers[index] + this.sumWithRecursion(index + 1);
+      }
+    }
+
+    const numberSum = new NumberSum();
+
+    function addNumber() {
+      const numberInput = document.getElementById('numberInput');
+      const number = parseFloat(numberInput.value);
+      numberSum.addNumber(number);
+      numberInput.value = '';
+    }
+
+    function addNumbers() {
+      const numbersArrayInput = document.getElementById('numbersArrayInput');
+      const numbersArray = numbersArrayInput.value.split(',').map(num => parseFloat(num.trim()));
+      numberSum.addNumbers(numbersArray);
+      numbersArrayInput.value = '';
+    }
+
+    function calculateSum(method) {
+      let sum;
+      if (method === 'reduce') {
+        sum = numberSum.sumWithReduce();
+      } else if (method === 'loop') {
+        sum = numberSum.sumWithLoop();
+      } else if (method === 'recursion') {
+        sum = numberSum.sumWithRecursion();
+      }
+      const resultElement = document.getElementById('result');
+      resultElement.textContent = `Sum using ${method}: ${sum}`;
+    }
+  </script>
+</body>
+</html>
